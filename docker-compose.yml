@@ -1,0 +1,21 @@
+services:
+  # 后端服务
+  backend:
+    build: ./backend
+    container_name: agent-backend
+    restart: always
+    env_file:
+      - ./backend/.env
+    # 为了安全，后端不需要对外暴露端口，只让前端内部访问
+    expose:
+      - "8002"
+
+  # 前端服务
+  frontend:
+    build: ./frontend
+    container_name: agent-frontend
+    restart: always
+    ports:
+      - "8080:80" # 把服务器的 80 端口映射给前端的 Nginx
+    depends_on:
+      - backend
